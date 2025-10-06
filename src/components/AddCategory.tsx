@@ -1,10 +1,10 @@
 import { useState } from "react";
 
 interface AddCategoryProps {
-  onAddCategory: (category: string) => void;
+  onNewCategory: (category: string) => void;
 }
 
-export const AddCategory: React.FC<AddCategoryProps> = ({ onAddCategory }) => {
+export const AddCategory: React.FC<AddCategoryProps> = ({ onNewCategory }) => {
   const [inputValue, setInputValue] = useState("");
 
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -14,10 +14,11 @@ export const AddCategory: React.FC<AddCategoryProps> = ({ onAddCategory }) => {
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const inputTrim = inputValue.trim();
 
-    if (inputValue.trim().length <= 1) return;
+    if (inputTrim.length <= 1) return;
 
-    onAddCategory(inputValue);
+    onNewCategory(inputTrim);
     setInputValue("");
   };
 
