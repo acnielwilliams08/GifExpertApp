@@ -1,9 +1,5 @@
-import { useEffect, useState } from "react";
-import { getGifs } from "../helpers/getGifs";
-
-interface GifGridProps {
-  category: string;
-}
+import { useFetchGif } from "../hooks/useFetchGif";
+import { GifItem } from "./GifItem";
 
 interface ImgeData {
   id: string;
@@ -11,30 +7,24 @@ interface ImgeData {
   url: string;
 }
 
+interface GifGridProps {
+  category: string;
+}
+
 export const GifGrid: React.FC<GifGridProps> = ({ category }) => {
-  const [images, setImages] = useState([]);
-
-  const getImages = async () => {
-    const newImages = await getGifs(category);
-    setImages(newImages);
-  };
-
-  useEffect(() => {
-    getImages();
-  }, []);
+  const { images, isLoading } = useFetchGif(category);
 
   return (
     <>
       <h3> {category} </h3>
 
-      <ol>
-        {images.map(({ id, title, url }: ImgeData) => (
-          <li key={id}>
-            <h2> {title} </h2>
-            <img src={url} alt="image" />
-          </li>
+      {isLoading && <h2>Cargando...</h2>}
+
+      <section className="card-grid">
+        {images.map((image: ImgeData) => (
+          <GifItem key={image.id} {...image}></GifItem>
         ))}
-      </ol>
+      </section>
     </>
   );
 };
